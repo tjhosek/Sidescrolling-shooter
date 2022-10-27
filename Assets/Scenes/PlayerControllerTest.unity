@@ -558,11 +558,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4374287695398189597, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4374287695398189597, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: ede1bc113150c7f41a316380b35b31eb,
         type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 4374287695398189599, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
+      propertyPath: jumpHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4374287695806266537, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4374287695806266537, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.65
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4374287695398189596, guid: e96a4aa8bf61c144ba8cd1279ee5ff91, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e96a4aa8bf61c144ba8cd1279ee5ff91, type: 3}
 --- !u!1 &1383375887
 GameObject:
