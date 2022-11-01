@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UIElements;
 
 /// <summary>
@@ -8,25 +9,11 @@ using UnityEngine.UIElements;
 /// </summary>
 public class PlayerStateMachine : StateMachine
 {
-    /// <summary>
-    /// State that represents when the player is not moving
-    /// </summary>
-    protected class IdleState : State {
-        public override void UpdateBehavior() {
-            
-        }
-        public override void OnEnter(State oldState) {
-            Debug.Log(string.Format("Entered %s from %s", "IdleState", nameof(oldState)));
-        }
-        public override void OnExit(State newState) {
-            Debug.Log(string.Format("Left %s into %s", "IdleState", nameof(newState)));
-        }
-    }
-
     public override State state {
+        get { return base._state; }
         set {
             base.state = value; // Base behavior
-            stateLabel.text = nameof(value); // Updating the label of the state
+            stateLabel.SetText(value.name); // Updating the label of the state
         }
     }
     private State idleState;
@@ -34,16 +21,39 @@ public class PlayerStateMachine : StateMachine
     /// Label used to keep track of the state
     /// </summary>
     [SerializeField]
-    private Label stateLabel;
+    private TextMeshProUGUI stateLabel;
+    /// <summary>
+    /// PlayerController used to measure speed, etc.
+    /// </summary>
+    private PlayerController playerController;
+    private bool _dead;
+    public bool dead {
+        set { 
+                _dead = value; 
+                if(value) {
+                    state = new DeadState();
+                } else {
+                    state = new IdleState();
+                }
+            }
+        get { return _dead; }    
+        
+    }
     protected new void Start() {
         base.Start();
         // Setting the default state
-        idleState = new IdleState();
-        state = idleState;
+        dead = false;
+        playerController = GetComponent<PlayerController>();
     }
 
     protected new void Update() {
         base.Update();
-        // Define new stuff here...
+        if (playerController.playerVelocity.y < 0 && !(state is FallingState)) {
+            state = new FallingState();
+        } else if (playerController.playerVelocity.y >= 0 && !(state is IdleState)) {
+            state = new IdleState();
+        }
     }
+
+    
 }

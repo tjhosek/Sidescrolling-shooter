@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// A State. Defines behavior of a state. Transitioning between states is managed by StateMachine
+/// Defines what sould be done before, durring, and after a StateMachine is in a state. Transitioning between states is managed by StateMachine
 /// </summary>
 public abstract class State
 {
@@ -12,7 +12,10 @@ public abstract class State
     /// The name of the state. Primarily used for debugging purposes
     /// </summary>
     /// <value></value>
-    public string name { get; set; }
+    public string name { 
+        get { return _name; } 
+        set {_name = value; } 
+        }
 
     /// <summary>
     /// Empty constructor
@@ -22,7 +25,7 @@ public abstract class State
         this.name = "";
     }
     /// <summary>
-    /// A constructor that takes in a name to assign
+    /// A constructor that is assigned the given name
     /// </summary>
     /// <param name="name">name for the state</param>
     /// <returns>A newly constructed state with name=name</returns>

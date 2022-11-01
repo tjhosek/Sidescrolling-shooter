@@ -306,7 +306,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-22824
+  m_Name: pb_Mesh50104
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -471,6 +471,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1191240518471687062, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3076535968466224149, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4374287695009941368, guid: e96a4aa8bf61c144ba8cd1279ee5ff91,
         type: 3}
       propertyPath: m_Enabled

@@ -8,13 +8,19 @@ using UnityEngine;
 public abstract class StateMachine : MonoBehaviour
 {
     protected State _state;
+    /// <summary>
+    /// The current State of this StateMachine. Changing this value automatically calls the OnExit() and OnEnter() methods for the old and new states respectively
+    /// </summary>
+    /// <value>The current state</value>
     public virtual State state {
-        get { return state; }
+        get { return _state; }
         set {
-            state.OnExit(value);
-            State oldState = state;
-            state = value;
-            state.OnEnter(oldState);
+            if(_state != null) {
+                _state.OnExit(value);
+            }
+            State oldState = _state;
+            _state = value;
+            _state.OnEnter(oldState);
         }
     }
     protected virtual void Start()
@@ -24,6 +30,8 @@ public abstract class StateMachine : MonoBehaviour
 
     protected virtual void Update()
     {
-        state.UpdateBehavior();
+        if (_state != null) {
+            _state.UpdateBehavior();
+        }
     }
 }

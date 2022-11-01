@@ -19,8 +19,11 @@ public class PlayerController : MonoBehaviour
     protected float gravity = -9.8f; // Speed of gravity
     [SerializeField]
     protected TextMeshProUGUI groundedDebugLabel;
+    [SerializeField]
+    protected TextMeshProUGUI velocityDebugLabel;
 
-    private Vector3 playerVelocity; // Maintains the current velocity of the player
+    private Vector3 _playerVelocity; // Maintains the current velocity of the player
+    public Vector3 playerVelocity{ get { return _playerVelocity; } }
 
     private CharacterController characterController;
 
@@ -37,10 +40,13 @@ public class PlayerController : MonoBehaviour
         bool grounded = characterController.isGrounded;
         groundedDebugLabel.SetText("grounded: " + grounded);
         // Ensuring vertical velocity is not decreasing when on the ground
-        if(grounded && playerVelocity.y < 0)
+        if(grounded && _playerVelocity.y < 0)
         {
-            playerVelocity.y = 0f;
+            _playerVelocity.y = 0f;
+        } else {
+            _playerVelocity.y += gravity * Time.deltaTime;
         }
+        velocityDebugLabel.SetText("Velocity.y: " + _playerVelocity.y);
         // Getting horizontal movement
         float x = Input.GetAxis("Horizontal") * moveSpeed;
         // Applying horizontal movement
@@ -50,13 +56,13 @@ public class PlayerController : MonoBehaviour
         // Checking for jumps
         if(Input.GetButtonDown("Jump") && grounded)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+            _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
         }
         // Applying gravity
-        playerVelocity.y += gravity * Time.deltaTime;
+        
 
         // Apply vertical movement
-        characterController.Move(playerVelocity * Time.deltaTime);
+        characterController.Move(_playerVelocity * Time.deltaTime);
         
     }
 }
