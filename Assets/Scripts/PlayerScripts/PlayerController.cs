@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -40,29 +41,41 @@ public class PlayerController : MonoBehaviour
         bool grounded = characterController.isGrounded;
         groundedDebugLabel.SetText("grounded: " + grounded);
         // Ensuring vertical velocity is not decreasing when on the ground
-        if(grounded && _playerVelocity.y < 0)
-        {
-            _playerVelocity.y = 0f;
-        } else {
-            _playerVelocity.y += gravity * Time.deltaTime;
-        }
+        //if(grounded && _playerVelocity.y < 0)
+        //{
+        //    _playerVelocity.y = 0f;
+        //} else if(!grounded){
+        //    _playerVelocity.y += gravity * Time.deltaTime;
+        //}
         velocityDebugLabel.SetText("Velocity.y: " + _playerVelocity.y);
         // Getting horizontal movement
         float x = Input.GetAxis("Horizontal") * moveSpeed;
         // Applying horizontal movement
         Vector3 move = new Vector3(x, 0, 0);
-        characterController.Move(move * Time.deltaTime);
 
         // Checking for jumps
-        if(Input.GetButtonDown("Jump") && grounded)
+        if (Input.GetButtonDown("Jump") && grounded)
         {
-            _playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+            
+            move.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+            Debug.Log("Jump! " + move.y);
         }
+
+        //characterController.Move(move * Time.deltaTime);
+        characterController.SimpleMove(move);
+
+        
         // Applying gravity
         
 
         // Apply vertical movement
-        characterController.Move(_playerVelocity * Time.deltaTime);
+        //characterController.Move(_playerVelocity * Time.deltaTime);
+
         
+    }
+
+    private void CheckCoverInput()
+    {
+
     }
 }
