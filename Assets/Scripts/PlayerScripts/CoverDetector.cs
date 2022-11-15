@@ -12,12 +12,14 @@ public class CoverDetector : MonoBehaviour
         if(other.CompareTag("Cover")) {
             Cover cover = other.GetComponent<Cover>();
             coverInRange.Add(cover);
+            cover.SetDebugLabel("In Range");
         }
     }
     protected void OnTriggerExit(Collider other) {
         if(other.CompareTag("Cover")) {
             Cover cover = other.GetComponent<Cover>();
             coverInRange.Remove(cover);
+            cover.SetDebugLabel("Invalid");
         }
     }
     public Cover ClosestCover(Vector3 position) {
