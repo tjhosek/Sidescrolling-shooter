@@ -18,7 +18,7 @@ public class CoverUser : MonoBehaviour
     public Boolean isPeeking { get { return _isPeeking; } }
 
     [SerializeField]
-    protected static float foregroundZ = 0; // The z value for the foreground, used when exiting from cover to return the character to the foreground
+    protected float foregroundZ = 0f; // The z value for the foreground, used when exiting from cover to return the character to the foreground
 
     protected void Start() {
         _inCover = false;
@@ -35,7 +35,8 @@ public class CoverUser : MonoBehaviour
     public void EnterCover(Cover newCover) {
         // Move to the new cover
         Vector3 newPosition = newCover.coverPoint.transform.position;
-        newPosition.y = 0;
+        newPosition.y = transform.position.y;
+
         // TODO: tween this
         transform.position = newPosition;
 
@@ -63,6 +64,9 @@ public class CoverUser : MonoBehaviour
             // Set the new position
             Vector3 newPosition = transform.position;
             newPosition.z = foregroundZ;
+            
+
+            transform.position = newPosition;
 
             // Set inCover
             _inCover = false;

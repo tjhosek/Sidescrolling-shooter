@@ -9,6 +9,7 @@ public class CoverDetector : MonoBehaviour
         coverInRange = new List<Cover>();
     }
     protected void OnTriggerEnter(Collider other) {
+        Debug.Log("CoverDetector entered by " + other.gameObject.name);
         if(other.CompareTag("Cover")) {
             Cover cover = other.GetComponent<Cover>();
             coverInRange.Add(cover);
@@ -16,19 +17,20 @@ public class CoverDetector : MonoBehaviour
         }
     }
     protected void OnTriggerExit(Collider other) {
+        Debug.Log("CoverDetector exited by " + other.gameObject.name);
         if(other.CompareTag("Cover")) {
             Cover cover = other.GetComponent<Cover>();
             coverInRange.Remove(cover);
             cover.SetDebugLabel("Invalid");
         }
     }
-    public Cover ClosestCover(Vector3 position) {
+    public Cover ClosestUnoccupiedCover(Vector3 position) {
         float dist = Mathf.Infinity;
         Cover closestCover = null;
-        for(int i = 0; i < coverInRange.Capacity; i++) {
+        for(int i = 0; i < coverInRange.Count; i++) {
             Cover cover = coverInRange[i];
             float newDist = Vector3.Distance(position, cover.transform.position);
-            if (newDist < dist) {
+            if (newDist < dist && !cover.occupied) {
                 closestCover = cover;
                 dist = newDist;
             }

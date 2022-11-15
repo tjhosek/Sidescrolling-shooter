@@ -27,51 +27,47 @@ public class PlayerController : MonoBehaviour
     public Vector3 playerVelocity{ get { return _playerVelocity; } }
 
     private CharacterController characterController;
+    private PlayerCoverUser playerCoverUser;
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
+        playerCoverUser = GetComponent<PlayerCoverUser>();
     }
 
     // Update is called once per frame
     private void Update()
     {
+        if (!playerCoverUser.inCover) {
+            // Storing if the player is grounded at the start of this update
+            bool grounded = characterController.isGrounded;
+            //groundedDebugLabel.SetText("grounded: " + grounded);
+            // Ensuring vertical velocity is not decreasing when on the ground
+            //velocityDebugLabel.SetText("Velocity.y: " + _playerVelocity.y);
+            // Getting horizontal movement
+            float x = Input.GetAxis("Horizontal") * moveSpeed;
+            // Applying horizontal movement
+            Vector3 move = new Vector3(x, 0, 0);
 
-        // Storing if the player is grounded at the start of this update
-        bool grounded = characterController.isGrounded;
-        groundedDebugLabel.SetText("grounded: " + grounded);
-        // Ensuring vertical velocity is not decreasing when on the ground
-        //if(grounded && _playerVelocity.y < 0)
-        //{
-        //    _playerVelocity.y = 0f;
-        //} else if(!grounded){
-        //    _playerVelocity.y += gravity * Time.deltaTime;
-        //}
-        velocityDebugLabel.SetText("Velocity.y: " + _playerVelocity.y);
-        // Getting horizontal movement
-        float x = Input.GetAxis("Horizontal") * moveSpeed;
-        // Applying horizontal movement
-        Vector3 move = new Vector3(x, 0, 0);
+            // Checking for jumps
+            if (Input.GetButtonDown("Jump") && grounded)
+            {
+                
+                move.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
+                Debug.Log("Jump! " + move.y);
+            }
 
-        // Checking for jumps
-        if (Input.GetButtonDown("Jump") && grounded)
-        {
+            //characterController.Move(move * Time.deltaTime);
+            characterController.SimpleMove(move);
+
             
-            move.y += Mathf.Sqrt(jumpHeight * -3.0f * gravity);
-            Debug.Log("Jump! " + move.y);
+            // Applying gravity
+            
+
+            // Apply vertical movement
+            //characterController.Move(_playerVelocity * Time.deltaTime);
+
         }
-
-        //characterController.Move(move * Time.deltaTime);
-        characterController.SimpleMove(move);
-
-        
-        // Applying gravity
-        
-
-        // Apply vertical movement
-        //characterController.Move(_playerVelocity * Time.deltaTime);
-
-        
     }
 
     private void CheckCoverInput()
