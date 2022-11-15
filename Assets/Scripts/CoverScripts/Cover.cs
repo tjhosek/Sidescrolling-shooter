@@ -12,6 +12,15 @@ public class Cover : MonoBehaviour
     public GameObject coverPoint; // Point at which the player takes cover
     [SerializeField]
     private TextMeshProUGUI debugText; // debug label to display cover's value
+    private bool _occupied;
+    public bool occupied {
+        get {
+            return _occupied;
+        }
+        set {
+            _occupied = value;
+        }
+    }
 
     public void SetDebugLabel(string text)
     {
