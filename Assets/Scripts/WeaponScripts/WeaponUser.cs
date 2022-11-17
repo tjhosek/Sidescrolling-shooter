@@ -12,6 +12,8 @@ public class WeaponUser : MonoBehaviour
     protected bool canUseRangedWeapons;
     [SerializeField]
     protected bool canUseMeleeWeapons;
+    [SerializeField]
+    protected LayerMask rangedLayerMask;
     public Weapon currentWeapon {
         get { return _currentWeapon; }
         set {
@@ -22,6 +24,7 @@ public class WeaponUser : MonoBehaviour
             }
         }
     }
+    private Ray _lastRay;
     protected Vector3 _target;
     /// <summary>
     /// What this WeaponUser is aiming at
@@ -32,6 +35,11 @@ public class WeaponUser : MonoBehaviour
         set { _target = value; }
     }
 
+    protected void Update()
+    {
+        Debug.DrawRay(_lastRay.origin, _lastRay.direction);
+    }
+
     /// <summary>
     /// Attacks with the weapon at the target
     /// </summary>
@@ -40,13 +48,14 @@ public class WeaponUser : MonoBehaviour
             // Make a ranged attack
             RangedWeapon currentRangedWeapon = (RangedWeapon) currentWeapon;
             // Draw the tracer line for the attack
-            LineRenderer tracer = Instantiate(currentRangedWeapon.tracer);
-            tracer.positionCount = 2;
-            tracer.SetPositions(new Vector3[2] {currentRangedWeapon.transform.position, target});
+            //LineRenderer tracer = Instantiate(currentRangedWeapon.tracer);
+            //tracer.positionCount = 2;
+            //tracer.SetPositions(new Vector3[2] {currentRangedWeapon.transform.position, target});
             // Fire a raycast from the weapon to the target
             RaycastHit hit;
-            Ray ray = new Ray(currentRangedWeapon.transform.position, target);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)) {
+            Ray ray = new Ray(currentRangedWeapon.transform.position, currentRangedWeapon.transform.position);
+            _lastRay = ray;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, rangedLayerMask, QueryTriggerInteraction.Ignore)) {
                 // Hit a collider
                 Collider collider = hit.collider;
                 Debug.Log(string.Format("Hit {0} at {1}", collider.ToString(), collider.transform.position.ToString()));

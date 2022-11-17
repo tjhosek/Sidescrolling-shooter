@@ -13,16 +13,17 @@ public class PlayerWeaponUser : WeaponUser
     [SerializeField]
     protected Camera cam;
     private float camToPlayerDistance;
-    
-    void Start()
+
+    protected void Start()
     {
         // Storing the distance from the camera to the player in order to ensure the gun aims correctly
         camToPlayerDistance = Vector3.Distance(cam.transform.position, transform.position);
     }
 
     
-    void Update()
+    protected new void Update()
     {
+        base.Update();
         // Setting the target to the position of the mouse in the world space
         Vector2 mousePos = Input.mousePosition;
         Vector3 mousePosWithDepth = new Vector3(mousePos.x, mousePos.y, camToPlayerDistance);
@@ -33,13 +34,15 @@ public class PlayerWeaponUser : WeaponUser
 
         // Fire the weapon if the mouse button is clicked
         if(Input.GetMouseButtonDown(0)) {
+            Debug.Log(target.ToString());
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit)) {
                 target = new Vector3(hit.point.x, hit.point.y, hit.point.z+.5f);
+                Debug.Log(target.ToString());
             }
             Attack();
         }
-
+        
     }
 }
