@@ -48,11 +48,11 @@ public class PlayerStateMachine : StateMachine
 
     protected new void Update() {
         base.Update();
-        if (playerController.playerVelocity.y < 0 && !(state is FallingState)) {
-            state = new FallingState();
-        } else if (playerController.playerVelocity.y >= 0 && !(state is IdleState)) {
-            state = new IdleState();
-        }
+        // if (playerController.playerVelocity.y < 0 && !(state is FallingState)) {
+        //     state = new FallingState();
+        // } else if (playerController.playerVelocity.y >= 0 && !(state is IdleState)) {
+        //     state = new IdleState();
+        // }
     }
 
     
