@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour, ILadderClimber
         if (!playerCoverUser.inCover) {
             if(transform.position.z != playerCoverUser.foregroundZ) {
                 // Clamping to foreground, not sure why this isn't allowed in the leaveCover method but this fix should work
-                Debug.Log("moving to foreground...");
+                // Debug.Log("moving to foreground...");
                 Vector3 newPosition = transform.position;
                 newPosition.z = playerCoverUser.foregroundZ;
                 transform.position = newPosition;
