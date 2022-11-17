@@ -48,6 +48,7 @@ public class PlayerCoverUser : CoverUser
             else if (inCover) {
                 Debug.Log("Exiting Cover...");
                 LeaveCover();
+                Debug.Log("transform.position: " + transform.position.ToString());
             }
         }
     }
