@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 7145734099054739517}
   - component: {fileID: 6985172758953128878}
   - component: {fileID: 3910501275318306541}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: WorldCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 9014086911195524306}
   - component: {fileID: 2730492315568696612}
   - component: {fileID: 4342867017190760204}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CoverDetector
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -453,10 +453,10 @@ GameObject:
   - component: {fileID: 4374287695398189599}
   - component: {fileID: 2535719577483447381}
   - component: {fileID: 2856325142601221870}
+  - component: {fileID: 1124574814782818376}
   - component: {fileID: 6990057964202241893}
   - component: {fileID: 6985151501056808364}
-  - component: {fileID: 1124574814782818376}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -563,6 +563,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateLabel: {fileID: 3298614231878558926}
+--- !u!114 &1124574814782818376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4374287695398189592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24d24e2b5a8097c46854fbd14213b57f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshair: {fileID: 7840299949114468666}
 --- !u!33 &6990057964202241893
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -613,19 +626,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1124574814782818376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4374287695398189592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24d24e2b5a8097c46854fbd14213b57f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshair: {fileID: 7840299949114468666}
 --- !u!1 &4374287695806266532
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +755,7 @@ GameObject:
   - component: {fileID: 2761783732144893602}
   - component: {fileID: 749126832471760812}
   - component: {fileID: 3298614231878558926}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PlayerStateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 2177257294750714411}
   - component: {fileID: 2588393998419122273}
   - component: {fileID: 669284460260522619}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CoverText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1393,7 +1393,7 @@ GameObject:
   - component: {fileID: 4494318231270760552}
   - component: {fileID: 332912751766167888}
   - component: {fileID: 42209150667944805}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: VelocityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

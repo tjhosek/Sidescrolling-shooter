@@ -26,7 +26,7 @@ public class TracerScript : MonoBehaviour
             lineRenderer.material.color = c;
             yield return new WaitForSeconds(.1f);
         }
-        Debug.Log("Coroutine finished");
+        //Debug.Log("Coroutine finished");
         Destroy(this);
     }
 }

@@ -25,6 +25,11 @@ public class PlayerWeaponUser : WeaponUser
         currentWeapon.transform.LookAt(target);
 
         if(Input.GetMouseButtonDown(0)) {
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit)) {
+                target = new Vector3(hit.point.x, hit.point.y, hit.point.z+.5f);
+            }
             Attack();
         }
 

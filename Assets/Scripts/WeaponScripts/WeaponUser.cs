@@ -45,12 +45,13 @@ public class WeaponUser : MonoBehaviour
             tracer.SetPositions(new Vector3[2] {currentRangedWeapon.transform.position, target});
             // Fire a raycast from the weapon to the target
             RaycastHit hit;
-            if (Physics.Raycast(currentRangedWeapon.transform.position, target, out hit)) {
+            if (Physics.Raycast(currentRangedWeapon.transform.position, target, out hit, QueryTriggerInteraction.Ignore)) {
                 // Hit a collider
                 Collider collider = hit.collider;
                 Debug.Log(string.Format("Hit {0} at {1}", collider.ToString(), collider.transform.position.ToString()));
                 if (collider.gameObject.TryGetComponent(out IDamageable damageable)) {
                     // If the collider's gameObject can be damaged, damage it the weapon's damage
+                    Debug.Log(string.Format("Damaged {0} for {1} damage", collider.ToString(), currentRangedWeapon.damage));
                     damageable.Hurt(currentRangedWeapon.damage);
                 }
             }

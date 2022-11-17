@@ -17,7 +17,7 @@ public interface IDamageable
                 }
             }
     }
-    public bool isDestroyed { get; protected set; }
+    public bool isDestroyed { get; set; }
 
     public void Hurt(float damage) {
         health -= damage;
