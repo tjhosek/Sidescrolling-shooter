@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UIElements;
 
+public enum PlayerState { IDLE, MOVING, CLIMBING, FALLING, SHOOTING, COVER, PEEKING, DEAD }
 /// <summary>
 /// State machine for controlling the player
 /// </summary>
@@ -26,6 +27,8 @@ public class PlayerStateMachine : StateMachine
     /// PlayerController used to measure speed, etc.
     /// </summary>
     private PlayerController playerController;
+    private PlayerCoverUser playerCoverUser;
+    private PlayerWeaponUser playerWeaponUser;
     private bool _dead;
     public bool dead {
         set { 
@@ -44,6 +47,8 @@ public class PlayerStateMachine : StateMachine
         // Setting the default state
         dead = false;
         playerController = GetComponent<PlayerController>();
+        playerCoverUser = GetComponent<PlayerCoverUser>();
+        playerWeaponUser = GetComponent<PlayerWeaponUser>();
     }
 
     protected new void Update() {
@@ -55,5 +60,51 @@ public class PlayerStateMachine : StateMachine
         // }
     }
 
-    
+    protected PlayerState StateBehavior(PlayerState state) {
+        switch (state) {
+            case PlayerState.IDLE:
+                if(playerController.isOnLadder) {
+                    return PlayerState.CLIMBING;
+                }
+                if(playerController.isMoving) {
+                    return PlayerState.MOVING;
+                }
+                if (playerController.playerVelocity.y < 0) {
+                    return PlayerState.FALLING;
+                }
+                if (playerCoverUser.inCover) {
+                    return PlayerState.COVER;
+                }
+                if(playerCoverUser.isPeeking) {
+                    return PlayerState.PEEKING;
+                }
+                return state;
+            case PlayerState.CLIMBING:
+                if (!playerController.isOnLadder) {
+                    return PlayerState.IDLE;
+                }
+                return state;
+            case PlayerState.MOVING:
+                if (!playerController.isMoving) {
+                    return PlayerState.IDLE;
+                }
+                return state;
+            case PlayerState.FALLING:
+                if (playerController.playerVelocity.y >= 0) {
+                    return PlayerState.IDLE;
+                }
+                return state;
+            case PlayerState.COVER:
+                if (!playerCoverUser.inCover) {
+                    return PlayerState.IDLE;
+                }
+                return state;
+            case PlayerState.PEEKING:
+                if (!playerCoverUser.isPeeking) {
+                    return PlayerState.PEEKING;
+                }
+                return state;
+            default: return state;
+        }
+    }
 }

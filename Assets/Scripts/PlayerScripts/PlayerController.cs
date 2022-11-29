@@ -34,7 +34,11 @@ public class PlayerController : MonoBehaviour, ILadderClimber
     private PlayerCoverUser playerCoverUser;
     private bool grounded;
     private bool _isOnLadder;
+    private bool _isMoving;
 
+    public bool isMoving {
+        get { return _isMoving; }
+    }
     public bool isOnLadder { 
         get {return _isOnLadder;}
         set {_isOnLadder = value;}
@@ -76,6 +80,7 @@ public class PlayerController : MonoBehaviour, ILadderClimber
                 velocityDebugLabel.SetText("position.z: " + transform.position.z);
                 // Getting horizontal movement
                 float x = Input.GetAxis("Horizontal") * moveSpeed;
+                _isMoving = x != 0;
                 // Applying horizontal movement
                 Vector3 move = new Vector3(x, 0, 0);
                 if(!isOnLadder) {
