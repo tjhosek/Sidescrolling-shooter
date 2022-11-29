@@ -53,7 +53,9 @@ public class WeaponUser : MonoBehaviour
             //tracer.SetPositions(new Vector3[2] {currentRangedWeapon.transform.position, target});
             // Fire a raycast from the weapon to the target
             RaycastHit hit;
-            Ray ray = new Ray(currentRangedWeapon.transform.position, currentRangedWeapon.transform.position);
+            Vector3 direction = (target - currentRangedWeapon.transform.position).normalized;
+            direction.z = 0;
+            Ray ray = new Ray(transform.position, direction);
             _lastRay = ray;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, rangedLayerMask, QueryTriggerInteraction.Ignore)) {
                 // Hit a collider
