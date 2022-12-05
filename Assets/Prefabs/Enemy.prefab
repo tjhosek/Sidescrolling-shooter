@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 583135947366332930}
   - component: {fileID: 583135947366332931}
+  - component: {fileID: 1031660822565118401}
   - component: {fileID: 583135947366332929}
   - component: {fileID: 583135947366332928}
   - component: {fileID: 583135947366333055}
@@ -53,6 +54,23 @@ MonoBehaviour:
   _isDestroyed: 0
   baseFlinchDuration: 0
   flinchDistance: 0
+--- !u!114 &1031660822565118401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583135947366333054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1293423c0a5669a4894d628943b5372a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  waitTime: 0
+  speed: 0
+  walkSpeed: 0
+  wanderDistance: 0
 --- !u!33 &583135947366332929
 MeshFilter:
   m_ObjectHideFlags: 0
