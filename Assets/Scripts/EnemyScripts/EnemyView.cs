@@ -10,6 +10,7 @@ public class EnemyView : MonoBehaviour
     public Vector3 lastKnownPoint { get {return _lastKnownPoint;} }
     private void onTriggerEnter(Collider other) {
         if (other.tag == "Player") {
+            Debug.Log("Player Detected!");
             _interest = other;
         }
     }
