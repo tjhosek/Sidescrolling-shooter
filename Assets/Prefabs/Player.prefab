@@ -1636,26 +1636,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5057619973287214024}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3870501363897052432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5400149381606885017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9181597910c9a0349b8e36f5cca60271, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damage: 1
-  _useTime: 1
-  _automatic: 0
-  capacity: 10
-  _range: 0
-  reloadTime: 2
-  _tracer: {fileID: 815704947882416678, guid: a3afca4d8f7a29c4c9ce4b4678c158df, type: 3}
-  muzzle: {fileID: 0}
 --- !u!198 &955752424
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -1792,7 +1772,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 100
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -6493,3 +6473,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3870501363897052432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5400149381606885017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9181597910c9a0349b8e36f5cca60271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _useTime: 1
+  _automatic: 0
+  capacity: 10
+  _range: 0
+  reloadTime: 2
+  _tracer: {fileID: 815704947882416678, guid: a3afca4d8f7a29c4c9ce4b4678c158df, type: 3}
+  muzzle: {fileID: 0}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum EnemyState { IDLE, ACTIVE, RETREATING}
+public enum EnemyState { IDLE, ACTIVE, RETREATING, DEAD }
 public class EnemyStateMachine : MonoBehaviour
 {
     private EnemyState _state;
@@ -37,10 +37,12 @@ public class EnemyStateMachine : MonoBehaviour
     private float nextFireTime;
     protected Rigidbody rigidbody;
     protected EnemyWeaponUser weaponUser;
+    protected EnemyController enemyController;
     protected void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         weaponUser = GetComponent<EnemyWeaponUser>();
+        enemyController = GetComponent<EnemyController>();
         targetX = transform.position.x;
         nextMoveTime = Time.time + moveDelay;
     }
@@ -77,14 +79,13 @@ public class EnemyStateMachine : MonoBehaviour
                 if (view.interest != null) {
                     state = EnemyState.ACTIVE;
                 }
+                if (enemyController.isDestroyed)
+                {
+                    state = EnemyState.DEAD;
+                }
                 break;
 
             case (EnemyState.ACTIVE):
-            
-            
-                // Point the view at the player
-                //head.transform.LookAt(view.lastKnownPoint);
-
                 // Direct the weapon at the target
                 weaponUser.target = view.interest.transform.position;
                 // Determine if the target is in range
@@ -104,6 +105,10 @@ public class EnemyStateMachine : MonoBehaviour
                     weaponUser.Attack();
                     nextFireTime = Time.time + fireDelay;
                     }
+                if (enemyController.isDestroyed)
+                {
+                    state = EnemyState.DEAD;
+                }
                 break;
         }
     }
