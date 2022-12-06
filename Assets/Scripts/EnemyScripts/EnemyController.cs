@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     protected float baseFlinchDuration;
     [SerializeField]
     protected float flinchDistance;
+    
     public float maxHealth { 
         get {return _maxHealth;}
         set {_maxHealth = value;}
