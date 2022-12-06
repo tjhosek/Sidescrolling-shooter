@@ -51,6 +51,9 @@ public class WeaponUser : MonoBehaviour
             //LineRenderer tracer = Instantiate(currentRangedWeapon.tracer);
             //tracer.positionCount = 2;
             //tracer.SetPositions(new Vector3[2] {currentRangedWeapon.transform.position, target});
+
+            // Make a particles for the attack
+            currentRangedWeapon.shotParticles.Play();
             // Fire a raycast from the weapon to the target
             RaycastHit hit;
             Vector3 direction = (target - currentRangedWeapon.transform.position).normalized;

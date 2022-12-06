@@ -26,6 +26,8 @@ public class RangedWeapon : Weapon
     /// </summary>
     [SerializeField]
     protected GameObject muzzle;
+    protected ParticleSystem _shotParticles;
+    public ParticleSystem shotParticles { get { return _shotParticles; } }
     protected int _currentAmmo;
     public int currentAmmo {
         get {return _currentAmmo; }
@@ -37,6 +39,7 @@ public class RangedWeapon : Weapon
     void Start()
     {
         currentAmmo = capacity;
+        _shotParticles = GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
