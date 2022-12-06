@@ -10,7 +10,12 @@ public class RangedWeapon : Weapon
     [SerializeField]
     protected int capacity;
     [SerializeField]
-    protected float range;
+    protected float _range;
+    public float range
+    {
+        get { return _range; }
+        set { _range = value; }
+    }
     [SerializeField]
     protected float reloadTime;
     [SerializeField]

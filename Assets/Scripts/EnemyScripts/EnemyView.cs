@@ -8,23 +8,23 @@ public class EnemyView : MonoBehaviour
     public Collider interest { get {return _interest;} }
     private Vector3 _lastKnownPoint;
     public Vector3 lastKnownPoint { get {return _lastKnownPoint;} }
-    private void onTriggerEnter(Collider other) {
-        if (other.tag == "Player") {
+    protected void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
             Debug.Log("Player Detected!");
             _interest = other;
         }
     }
 
-    private void onTriggerStay(Collider other) {
-        if (other.tag == "Player") {
+    protected void OnTriggerStay(Collider other) {
+        if (other.CompareTag("Player")) {
             _lastKnownPoint = other.transform.position;
         }
     }
 
-    private void onTriggerExit(Collider other) {
-        if (other.tag == "Player") {
+    protected void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player")) {
             _lastKnownPoint = other.transform.position;
-            _interest = null;
+            //_interest = null;
         }
     }
 }
