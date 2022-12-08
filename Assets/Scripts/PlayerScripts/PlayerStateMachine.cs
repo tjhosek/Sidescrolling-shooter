@@ -8,16 +8,16 @@ public enum PlayerState { IDLE, MOVING, CLIMBING, FALLING, SHOOTING, COVER, PEEK
 /// <summary>
 /// State machine for controlling the player
 /// </summary>
-public class PlayerStateMachine : StateMachine
+public class PlayerStateMachine : MonoBehaviour
 {
-    public override State state {
-        get { return base._state; }
+    protected PlayerState _state;
+    public  PlayerState state {
+        get { return _state; }
         set {
-            base.state = value; // Base behavior
-            stateLabel.SetText(value.name); // Updating the label of the state
+            _state = value; // Base behavior
+            stateLabel.SetText(value.ToString()); // Updating the label of the state
         }
     }
-    private State idleState;
     /// <summary>
     /// Label used to keep track of the state
     /// </summary>
@@ -29,82 +29,64 @@ public class PlayerStateMachine : StateMachine
     private PlayerController playerController;
     private PlayerCoverUser playerCoverUser;
     private PlayerWeaponUser playerWeaponUser;
-    private bool _dead;
-    public bool dead {
-        set { 
-                _dead = value; 
-                if(value) {
-                    state = new DeadState();
-                } else {
-                    state = new IdleState();
-                }
-            }
-        get { return _dead; }    
-        
-    }
-    protected new void Start() {
-        base.Start();
-        // Setting the default state
-        dead = false;
+    protected void Start() {
+        state = PlayerState.IDLE;
         playerController = GetComponent<PlayerController>();
         playerCoverUser = GetComponent<PlayerCoverUser>();
         playerWeaponUser = GetComponent<PlayerWeaponUser>();
     }
 
-    protected new void Update() {
-        base.Update();
-        // if (playerController.playerVelocity.y < 0 && !(state is FallingState)) {
-        //     state = new FallingState();
-        // } else if (playerController.playerVelocity.y >= 0 && !(state is IdleState)) {
-        //     state = new IdleState();
-        // }
+    protected void Update() {
+        StateBehavior();
     }
 
-    protected PlayerState StateBehavior(PlayerState state) {
+    protected void StateBehavior() {
         switch (state) {
             case PlayerState.IDLE:
                 if(playerController.isOnLadder) {
-                    return PlayerState.CLIMBING;
+                    state =  PlayerState.CLIMBING;
                 }
-                if(playerController.isMoving) {
-                    return PlayerState.MOVING;
+                else if(playerController.isMoving) {
+                    state =  PlayerState.MOVING;
                 }
-                if (playerController.playerVelocity.y < 0) {
-                    return PlayerState.FALLING;
+                // if (playerController.playerVelocity.y < 0) {
+                //     state = PlayerState.FALLING;
+                // }
+                else if (playerCoverUser.inCover) {
+                    state = PlayerState.COVER;
                 }
-                if (playerCoverUser.inCover) {
-                    return PlayerState.COVER;
+                else if(playerCoverUser.isPeeking) {
+                    state = PlayerState.PEEKING;
                 }
-                if(playerCoverUser.isPeeking) {
-                    return PlayerState.PEEKING;
-                }
-                return state;
+                break;
             case PlayerState.CLIMBING:
                 if (!playerController.isOnLadder) {
-                    return PlayerState.IDLE;
+                    state = PlayerState.IDLE;
                 }
-                return state;
+                break;
             case PlayerState.MOVING:
                 if (!playerController.isMoving) {
-                    return PlayerState.IDLE;
+                    state = PlayerState.IDLE;
                 }
-                return state;
+                if (playerCoverUser.inCover) {
+                    state = PlayerState.COVER;
+                }
+                break;
             case PlayerState.FALLING:
                 if (playerController.playerVelocity.y >= 0) {
-                    return PlayerState.IDLE;
+                    state = PlayerState.IDLE;
                 }
-                return state;
+                break;
             case PlayerState.COVER:
                 if (!playerCoverUser.inCover) {
-                    return PlayerState.IDLE;
+                    state = PlayerState.IDLE;
                 }
-                return state;
+                break;
             case PlayerState.PEEKING:
                 if (!playerCoverUser.isPeeking) {
-                    return PlayerState.PEEKING;
+                    state = PlayerState.PEEKING;
                 }
-                return state;
-            default: return state;
+                break;
         }
     }
 }

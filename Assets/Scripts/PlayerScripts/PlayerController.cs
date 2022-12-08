@@ -19,9 +19,9 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
     [SerializeField]
     protected float gravity = -9.8f; // Speed of gravity
     [SerializeField]
-    protected TextMeshProUGUI groundedDebugLabel;
+    protected TextMeshProUGUI healthLabel;
     [SerializeField]
-    protected TextMeshProUGUI velocityDebugLabel;
+    protected TextMeshProUGUI gameOverLabel;
     [SerializeField]
     protected float _climbSpeed;
     [SerializeField]
@@ -54,10 +54,30 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
     
     public float maxHealth { get {return _maxHealth; } set {_maxHealth = value;} }
     
-    public bool isDestroyed { get {return _isDestroyed; } set {_isDestroyed = value;} }
+    public bool isDestroyed { 
+        get {return _isDestroyed; } 
+        set {
+            _isDestroyed = value;
+            gameOverLabel.enabled = _isDestroyed;
+        } 
+    }
+    protected float _health;
+    public float health {
+        get { return _health; }
+        set { 
+            _health = Mathf.Clamp(value, 0, maxHealth); 
+            healthLabel.SetText(String.Format("Health: {0}/{1}",_health,_maxHealth));
+            if(_health == 0) {
+                isDestroyed = true;
+            } else {
+                isDestroyed = false;
+                }
+            }
+        }
 
     private void Start()
     {
+        health = maxHealth;
         characterController = GetComponent<CharacterController>();
         playerCoverUser = GetComponent<PlayerCoverUser>();
         grounded = false;
@@ -72,7 +92,6 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
             } else {
                 // Storing if the player is grounded at the start of this update
                 grounded = characterController.isGrounded;
-                //groundedDebugLabel.SetText("grounded: " + grounded);
                 // Applying gravity
                 _playerVelocity.y += gravity * Time.deltaTime;
                 // Ensuring vertical velocity is not decreasing when on the ground
@@ -80,8 +99,6 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
                 {
                     _playerVelocity.y = 0f;
                 }
-                
-                velocityDebugLabel.SetText("position.z: " + transform.position.z);
                 // Getting horizontal movement
                 float x = Input.GetAxis("Horizontal") * moveSpeed;
                 _isMoving = x != 0;
