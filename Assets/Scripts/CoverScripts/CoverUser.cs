@@ -37,8 +37,7 @@ public class CoverUser : MonoBehaviour
     /// <param name="newCover">The cover to move to</param>
     public void EnterCover(Cover newCover) {
         // Move to the new cover
-        Vector3 newPosition = newCover.coverPoint.transform.position;
-        newPosition.y = transform.position.y;
+        Vector3 newPosition = new Vector3(newCover.coverPoint.transform.position.x, transform.position.y, newCover.coverPoint.transform.position.z);
 
         // TODO: tween this
         transform.position = newPosition;

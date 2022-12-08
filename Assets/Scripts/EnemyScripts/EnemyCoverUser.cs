@@ -15,12 +15,12 @@ public class EnemyCoverUser : CoverUser
         }
     }
 
-    public Cover GetNearestCover(Vector3 position) {
+    public Cover GetNearestUnoccupiedCover(Vector3 position) {
         Cover bestCover = coverList[0];
         float dist = Mathf.Infinity;
         foreach(Cover cover in coverList) {
             float newDist = Vector3.Distance(cover.coverPoint.transform.position, position);
-            if(newDist < dist) {
+            if(newDist < dist && !cover.occupied) {
                 bestCover = cover;
                 dist = newDist;
             }

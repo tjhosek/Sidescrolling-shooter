@@ -37,18 +37,19 @@ public class PlayerCoverUser : CoverUser
         }
         // Determine if the player is entering or exiting cover
         if (Input.GetKeyDown(coverKey)) {
-            // Determine the selected cover by the one closest to the mouse cursor
-            Vector2 mousePos = Input.mousePosition;
-            selectedCover = coverDetector.ClosestUnoccupiedCover(new Vector3(mousePos.x, mousePos.y, 0));
-            if (!inCover && selectedCover != null) {
-                Debug.Log("Entering Cover...");
-                EnterCover(selectedCover);
-                selectedCover = null;
-            }
-            else if (inCover) {
+            if (inCover) {
                 Debug.Log("Exiting Cover...");
                 LeaveCover();
                 Debug.Log("transform.position: " + transform.position.ToString());
+            } else {
+                // Determine the selected cover by the one closest to the mouse cursor
+                Vector2 mousePos = Input.mousePosition;
+                selectedCover = coverDetector.ClosestUnoccupiedCover(new Vector3(mousePos.x, mousePos.y, 0));
+                if (selectedCover != null) {
+                    Debug.Log("Entering Cover...");
+                    EnterCover(selectedCover);
+                    selectedCover = null;
+                }
             }
         }
     }

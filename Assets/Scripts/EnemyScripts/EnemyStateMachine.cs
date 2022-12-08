@@ -39,6 +39,7 @@ public class EnemyStateMachine : MonoBehaviour
     protected EnemyWeaponUser weaponUser;
     protected EnemyController controller;
     protected EnemyCoverUser coverUser;
+    protected Cover nearestCover;
     protected void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -71,6 +72,9 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 break;
             case (EnemyState.ACTIVE):
+                if (view.interest == null) {
+                    state = EnemyState.IDLE;
+                }
                 // Direct the weapon at the target
                 weaponUser.target = view.interest.transform.position;
                 // Determine if the target is in range
@@ -92,10 +96,11 @@ public class EnemyStateMachine : MonoBehaviour
                     }
                 break;
             case (EnemyState.RETREATING):
-                // Determine closest cover
-                Cover nearestCover = coverUser.GetNearestCover(transform.position);
-                // Get the x point of the position
-                targetX = nearestCover.coverPoint.transform.position.x;
+                if(nearestCover.occupied) {
+                    // Find a new cover
+                    nearestCover = coverUser.GetNearestUnoccupiedCover(transform.position);
+                    targetX = nearestCover.coverPoint.transform.position.x;
+                }
                 // Run into the cover
                 if(!MoveToTargetX(runSpeed)) {
                     StartCoroutine(WaitInCover(5, nearestCover));
@@ -105,6 +110,9 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     protected void OnHealthDecrease() {
+        // Find the nearest cover
+        nearestCover = coverUser.GetNearestUnoccupiedCover(transform.position);
+        targetX = nearestCover.coverPoint.transform.position.x;
         state = EnemyState.RETREATING;
     }
     protected void OnDestroyed() {

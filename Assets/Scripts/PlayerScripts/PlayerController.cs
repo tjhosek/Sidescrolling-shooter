@@ -10,7 +10,7 @@ using UnityEngine;
 /// <remarks>
 /// Partially adapted from the Unity Scripting Reference at https://docs.unity3d.com/ScriptReference/CharacterController.Move.html
 /// </remarks>
-public class PlayerController : MonoBehaviour, ILadderClimber
+public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
 {
     [SerializeField]
     protected float moveSpeed; // Speed of the player character moving left and right
@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour, ILadderClimber
     protected TextMeshProUGUI velocityDebugLabel;
     [SerializeField]
     protected float _climbSpeed;
+    [SerializeField]
+    private float _maxHealth;
+    [SerializeField]
+    private bool _isDestroyed;
 
     private Vector3 _playerVelocity; // Maintains the current velocity of the player
     public Vector3 playerVelocity{ get { return _playerVelocity; } }
@@ -47,6 +51,10 @@ public class PlayerController : MonoBehaviour, ILadderClimber
         get {return _climbSpeed;}
         set {_climbSpeed = value;}
         }
+    
+    public float maxHealth { get {return _maxHealth; } set {_maxHealth = value;} }
+    
+    public bool isDestroyed { get {return _isDestroyed; } set {_isDestroyed = value;} }
 
     private void Start()
     {
@@ -59,35 +67,34 @@ public class PlayerController : MonoBehaviour, ILadderClimber
     private void Update()
     {
         if (!playerCoverUser.inCover) {
-            // Storing if the player is grounded at the start of this update
-            grounded = characterController.isGrounded;
-            //groundedDebugLabel.SetText("grounded: " + grounded);
-            // Applying gravity
-            _playerVelocity.y += gravity * Time.deltaTime;
-            // Ensuring vertical velocity is not decreasing when on the ground
-            if(grounded && playerVelocity.y < 0 && !isOnLadder)
-            {
-                _playerVelocity.y = 0f;
-            }
-            
-            velocityDebugLabel.SetText("position.z: " + transform.position.z);
-            // Getting horizontal movement
-            float x = Input.GetAxis("Horizontal") * moveSpeed;
-            _isMoving = x != 0;
-            // Applying horizontal movement
-            Vector3 move = new Vector3(x, 0, 0);
-            if(!isOnLadder) {
-                move += playerVelocity;
+            if(transform.position.z != playerCoverUser.foregroundZ) {
+                transform.position = new Vector3(transform.position.x, transform.position.y, playerCoverUser.foregroundZ);
             } else {
-                float y = Input.GetAxis ("Vertical") * climbSpeed;
-                move.y = y;
+                // Storing if the player is grounded at the start of this update
+                grounded = characterController.isGrounded;
+                //groundedDebugLabel.SetText("grounded: " + grounded);
+                // Applying gravity
+                _playerVelocity.y += gravity * Time.deltaTime;
+                // Ensuring vertical velocity is not decreasing when on the ground
+                if(grounded && playerVelocity.y < 0 && !isOnLadder)
+                {
+                    _playerVelocity.y = 0f;
+                }
+                
+                velocityDebugLabel.SetText("position.z: " + transform.position.z);
+                // Getting horizontal movement
+                float x = Input.GetAxis("Horizontal") * moveSpeed;
+                _isMoving = x != 0;
+                // Applying horizontal movement
+                Vector3 move = new Vector3(x, 0, 0);
+                if(!isOnLadder) {
+                    move += playerVelocity;
+                } else {
+                    float y = Input.GetAxis ("Vertical") * climbSpeed;
+                    move.y = y;
+                }
+                characterController.Move(move * Time.deltaTime);
             }
-            characterController.Move(move * Time.deltaTime);
         }
-    }
-
-    private void CheckCoverInput()
-    {
-
     }
 }
