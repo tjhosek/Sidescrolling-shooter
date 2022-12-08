@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Trigger to detect elligible cover for the player to enter
+/// </summary>
 public class CoverDetector : MonoBehaviour
 {
     private List<Cover> coverInRange;
@@ -24,6 +26,11 @@ public class CoverDetector : MonoBehaviour
             cover.SetDebugLabel("Invalid");
         }
     }
+    /// <summary>
+    /// Returns the closest unoccupied cover
+    /// </summary>
+    /// <param name="position">position to measure closeness from</param>
+    /// <returns>The closest Cover or null if there is no unocupied cover</returns>
     public Cover ClosestUnoccupiedCover(Vector3 position) {
         float dist = Mathf.Infinity;
         Cover closestCover = null;

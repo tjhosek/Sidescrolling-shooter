@@ -19,27 +19,27 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
     [SerializeField]
     protected float gravity = -9.8f; // Speed of gravity
     [SerializeField]
-    protected TextMeshProUGUI healthLabel;
+    protected TextMeshProUGUI healthLabel; // Label to track health
     [SerializeField]
-    protected TextMeshProUGUI gameOverLabel;
+    protected TextMeshProUGUI gameOverLabel; // Label to display game over when dead
     [SerializeField]
-    protected float _climbSpeed;
+    protected float _climbSpeed; // speed the player climbs ladders
     [SerializeField]
     private float _maxHealth;
     [SerializeField]
     private bool _isDestroyed;
-
     private Vector3 _playerVelocity; // Maintains the current velocity of the player
     public Vector3 playerVelocity{ get { return _playerVelocity; } }
-    
-    
-
-    private CharacterController characterController;
+    private CharacterController characterController; // character controller component
     private PlayerCoverUser playerCoverUser;
-    private bool grounded;
+    private bool grounded; // If this character is grounded
     private bool _isOnLadder;
     private bool _isMoving;
 
+    /// <summary>
+    /// If the player is moving or not
+    /// </summary>
+    /// <value></value>
     public bool isMoving {
         get { return _isMoving; }
     }
@@ -83,12 +83,13 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
         grounded = false;
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (!playerCoverUser.inCover) {
+            // Clamping Z as a bandaid fix for a glitch in the Cover system
             if(transform.position.z != playerCoverUser.foregroundZ) {
                 transform.position = new Vector3(transform.position.x, transform.position.y, playerCoverUser.foregroundZ);
+                _isMoving = false;
             } else {
                 // Storing if the player is grounded at the start of this update
                 grounded = characterController.isGrounded;
@@ -112,6 +113,8 @@ public class PlayerController : MonoBehaviour, ILadderClimber, IDamageable
                 }
                 characterController.Move(move * Time.deltaTime);
             }
+        } else {
+            _isMoving = false;
         }
     }
 }

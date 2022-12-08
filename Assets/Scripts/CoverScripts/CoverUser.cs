@@ -15,10 +15,18 @@ public class CoverUser : MonoBehaviour
     /// </summary>
     public Boolean inCover { get { return _inCover; }  }
     protected Boolean _isPeeking; // If the character is peeking from cover
+    /// <summary>
+    /// True if this character is peeking, false otherwise
+    /// </summary>
+    /// <value></value>
     public Boolean isPeeking { get { return _isPeeking; } }
 
     [SerializeField]
     protected float _foregroundZ = 0f; // The z value for the foreground, used when exiting from cover to return the character to the foreground
+    /// <summary>
+    /// The Z value of the "foreground" where the cover user returns to after leaving cover
+    /// </summary>
+    /// <value></value>
     public float foregroundZ {
         get { return _foregroundZ; }
     }

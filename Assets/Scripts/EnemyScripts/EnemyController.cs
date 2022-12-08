@@ -2,16 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Defines the health and some basic physics behaviors of the enemy
+/// </summary>
 public class EnemyController : MonoBehaviour, IDamageable
 {
     [SerializeField]
     protected float _maxHealth;
     [SerializeField]
     protected bool _isDestroyed;
+    /// <summary>
+    /// The duration of the flinch when shot
+    /// </summary>
     [SerializeField]
-    protected float baseFlinchDuration;
+    protected float baseFlinchDuration; 
+    /// <summary>
+    /// The distance of the flinch when shot
+    /// </summary>
     [SerializeField]
     protected float flinchDistance;
+    /// <summary>
+    /// The gravity to apply to this character
+    /// </summary>
     [SerializeField]
     protected float gravity;
     protected Rigidbody rigidbody;
@@ -40,6 +52,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         get { return _health; }
         set { 
             if(value < _health) {
+                // Character damaged
                 SendMessage("OnHealthDecrease");
                 StartCoroutine(Flinch(baseFlinchDuration));
             }
@@ -57,7 +70,6 @@ public class EnemyController : MonoBehaviour, IDamageable
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         // Applying simple gravity
@@ -66,6 +78,11 @@ public class EnemyController : MonoBehaviour, IDamageable
         rigidbody.MovePosition(newPosition);
     }
 
+    /// <summary>
+    /// Coroutine to give some flinch to the enemy when shot
+    /// </summary>
+    /// <param name="flinchDuration"></param>
+    /// <returns></returns>
     private IEnumerator Flinch(float flinchDuration)
     {
         float start = Time.time;

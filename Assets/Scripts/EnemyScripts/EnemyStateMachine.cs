@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+/// <summary>
+/// Enum for enemy states
+/// </summary>
 public enum EnemyState { IDLE, ACTIVE, RETREATING, COVER, DEAD }
+/// <summary>
+/// Determines the AI behavior of the enemy
+/// </summary>
 public class EnemyStateMachine : MonoBehaviour
 {
     private EnemyState _state;
     [SerializeField]
-    protected EnemyState state{
+    /// <summary>
+    /// The state this enemy is in currently
+    /// </summary>
+    /// <value></value>
+    public EnemyState state{
         get { return _state; }
         set {
             _state = value;
@@ -16,30 +25,31 @@ public class EnemyStateMachine : MonoBehaviour
         }
     }
     [SerializeField]
-    protected float moveDelay;
+    protected float moveDelay; // Delay between random idle movements
     [SerializeField]
-    protected float runSpeed;
+    protected float runSpeed; // Speed when running
     [SerializeField]
-    protected float walkSpeed;
+    protected float walkSpeed; // Speed when walking
     [SerializeField]
-    protected float wanderDistance;
+    protected float wanderDistance; // The highest distance an enemy will wander away
     [SerializeField]
-    protected Transform head;
+    protected Transform head; // The enemy's head. Used for pointing the view at things if applicable
     [SerializeField]
-    protected EnemyView view;
+    protected EnemyView view; // The enemy's view
     [SerializeField]
-    protected float fireDelay;
+    protected float fireDelay; // The delay between fired shots
     [SerializeField]
-    protected TextMeshProUGUI stateText;
-    protected float targetX;
-    protected float targetThreshold = .1f;
-    private float nextMoveTime;
-    private float nextFireTime;
+    protected TextMeshProUGUI stateText; // Debug text to display the state
+    protected float targetX; // Used when determining enemy movement
+    protected float targetThreshold = .1f; // Used to estimate position
+    private float nextMoveTime; // The next time the enemy will move when idle
+    private float nextFireTime; // The next time the enemy will fire when active
+    // Different components of the enemy
     protected Rigidbody rigidbody;
     protected EnemyWeaponUser weaponUser;
     protected EnemyController controller;
     protected EnemyCoverUser coverUser;
-    protected Cover nearestCover;
+    protected Cover nearestCover; // Used when retreating to cover
     protected void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -72,6 +82,7 @@ public class EnemyStateMachine : MonoBehaviour
                 }
                 break;
             case (EnemyState.ACTIVE):
+                // if we don't see anything start idleing again
                 if (view.interest == null) {
                     state = EnemyState.IDLE;
                 }
@@ -91,6 +102,7 @@ public class EnemyStateMachine : MonoBehaviour
                     }
                 }
                 else if(Time.time >= nextFireTime) {
+                    // Fire the weapon if the delay has passed, then set a new delay
                     weaponUser.Attack();
                     nextFireTime = Time.time + fireDelay;
                     }
@@ -99,25 +111,40 @@ public class EnemyStateMachine : MonoBehaviour
                 if(nearestCover.occupied) {
                     // Find a new cover
                     nearestCover = coverUser.GetNearestUnoccupiedCover(transform.position);
-                    targetX = nearestCover.coverPoint.transform.position.x;
+                    if (nearestCover != null) {
+                        targetX = nearestCover.coverPoint.transform.position.x;
+                    } else {
+                        // If there isn't a closer cover, shoot instead or return to idle if the view doesn't have an interest yet
+                        state = view.interest == null ? EnemyState.IDLE : EnemyState.ACTIVE;
+                    }
                 }
-                // Run into the cover
+                // Run into cover
                 if(!MoveToTargetX(runSpeed)) {
                     StartCoroutine(WaitInCover(5, nearestCover));
                 }
                 break;
         }
     }
-
+    /// <summary>
+    /// Listener for health decrease to know when to retreat
+    /// </summary>
     protected void OnHealthDecrease() {
         // Find the nearest cover
         nearestCover = coverUser.GetNearestUnoccupiedCover(transform.position);
-        targetX = nearestCover.coverPoint.transform.position.x;
-        state = EnemyState.RETREATING;
+        if (nearestCover != null) {
+            targetX = nearestCover.coverPoint.transform.position.x;
+            state = EnemyState.RETREATING;
+        }
     }
+    /// <summary>
+    /// Listener for when this enemy is destroyed
+    /// </summary>
     protected void OnDestroyed() {
         state = EnemyState.DEAD;
     }
+    /// <summary>
+    /// Listener for when this enemy sees a target
+    /// </summary>
     protected void OnInterestDetected() {
         if (state == EnemyState.IDLE) {
             state = EnemyState.ACTIVE;
@@ -140,7 +167,12 @@ public class EnemyStateMachine : MonoBehaviour
         }
         return false;
     }
-
+    /// <summary>
+    /// Coroutine that puts an enemy in cover, waits, and then leaves cover
+    /// </summary>
+    /// <param name="time">Time to wait before leaving cover</param>
+    /// <param name="cover">Cover to enter</param>
+    /// <returns></returns>
     private IEnumerator WaitInCover(float time, Cover cover) {
         coverUser.EnterCover(cover);
         state = EnemyState.COVER;
