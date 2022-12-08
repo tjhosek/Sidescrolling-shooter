@@ -59,38 +59,30 @@ public class PlayerController : MonoBehaviour, ILadderClimber
     private void Update()
     {
         if (!playerCoverUser.inCover) {
-            if(transform.position.z != playerCoverUser.foregroundZ) {
-                // Clamping to foreground, not sure why this isn't allowed in the leaveCover method but this fix should work
-                // Debug.Log("moving to foreground...");
-                Vector3 newPosition = transform.position;
-                newPosition.z = playerCoverUser.foregroundZ;
-                transform.position = newPosition;
-            }  else {
-                // Storing if the player is grounded at the start of this update
-                grounded = characterController.isGrounded;
-                //groundedDebugLabel.SetText("grounded: " + grounded);
-                // Applying gravity
-                _playerVelocity.y += gravity * Time.deltaTime;
-                // Ensuring vertical velocity is not decreasing when on the ground
-                if(grounded && playerVelocity.y < 0 && !isOnLadder)
-                {
-                    _playerVelocity.y = 0f;
-                }
-                
-                velocityDebugLabel.SetText("position.z: " + transform.position.z);
-                // Getting horizontal movement
-                float x = Input.GetAxis("Horizontal") * moveSpeed;
-                _isMoving = x != 0;
-                // Applying horizontal movement
-                Vector3 move = new Vector3(x, 0, 0);
-                if(!isOnLadder) {
-                    move += playerVelocity;
-                } else {
-                    float y = Input.GetAxis ("Vertical") * climbSpeed;
-                    move.y = y;
-                }
-                characterController.Move(move * Time.deltaTime);
+            // Storing if the player is grounded at the start of this update
+            grounded = characterController.isGrounded;
+            //groundedDebugLabel.SetText("grounded: " + grounded);
+            // Applying gravity
+            _playerVelocity.y += gravity * Time.deltaTime;
+            // Ensuring vertical velocity is not decreasing when on the ground
+            if(grounded && playerVelocity.y < 0 && !isOnLadder)
+            {
+                _playerVelocity.y = 0f;
             }
+            
+            velocityDebugLabel.SetText("position.z: " + transform.position.z);
+            // Getting horizontal movement
+            float x = Input.GetAxis("Horizontal") * moveSpeed;
+            _isMoving = x != 0;
+            // Applying horizontal movement
+            Vector3 move = new Vector3(x, 0, 0);
+            if(!isOnLadder) {
+                move += playerVelocity;
+            } else {
+                float y = Input.GetAxis ("Vertical") * climbSpeed;
+                move.y = y;
+            }
+            characterController.Move(move * Time.deltaTime);
         }
     }
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 583135947366332931}
   - component: {fileID: 1031660822565118401}
   - component: {fileID: 6630657229308898904}
+  - component: {fileID: 8451922896056294576}
   - component: {fileID: 583135947366332929}
   - component: {fileID: 583135947366332928}
   - component: {fileID: 583135947366333055}
@@ -70,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveDelay: 5
-  speed: 6
+  runSpeed: 6
   walkSpeed: 3
   wanderDistance: 5
   head: {fileID: 1286888223139605930}
@@ -95,6 +96,19 @@ MonoBehaviour:
   rangedLayerMask:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &8451922896056294576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583135947366333054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9005647ffb6e8f4f9e050c279930980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _foregroundZ: 0
 --- !u!33 &583135947366332929
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -223,7 +237,7 @@ GameObject:
   - component: {fileID: 8444493031019496835}
   - component: {fileID: 5171080980185400474}
   - component: {fileID: 5088334291333162797}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1107,7 +1121,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3757
+  m_VersionIndex: 2651
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

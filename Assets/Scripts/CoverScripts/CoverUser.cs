@@ -60,10 +60,9 @@ public class CoverUser : MonoBehaviour
     public void LeaveCover() {
         if (_inCover) {
             // Set the new position
-            Vector3 newPosition = transform.position;
-            newPosition.z = foregroundZ;
+            Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, _foregroundZ);
             
-            transform.position = transform.TransformPoint(newPosition);
+            transform.position = newPosition;
 
             // Leave the currentCover
             currentCover.SetDebugLabel("Unoccupied");

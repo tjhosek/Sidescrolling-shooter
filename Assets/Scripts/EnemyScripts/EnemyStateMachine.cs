@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum EnemyState { IDLE, ACTIVE, RETREATING, DEAD }
+public enum EnemyState { IDLE, ACTIVE, RETREATING, COVER, DEAD }
 public class EnemyStateMachine : MonoBehaviour
 {
     private EnemyState _state;
@@ -18,7 +18,7 @@ public class EnemyStateMachine : MonoBehaviour
     [SerializeField]
     protected float moveDelay;
     [SerializeField]
-    protected float speed;
+    protected float runSpeed;
     [SerializeField]
     protected float walkSpeed;
     [SerializeField]
@@ -37,12 +37,14 @@ public class EnemyStateMachine : MonoBehaviour
     private float nextFireTime;
     protected Rigidbody rigidbody;
     protected EnemyWeaponUser weaponUser;
-    protected EnemyController enemyController;
+    protected EnemyController controller;
+    protected EnemyCoverUser coverUser;
     protected void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
         weaponUser = GetComponent<EnemyWeaponUser>();
-        enemyController = GetComponent<EnemyController>();
+        controller = GetComponent<EnemyController>();
+        coverUser = GetComponent<EnemyCoverUser>();
         targetX = transform.position.x;
         nextMoveTime = Time.time + moveDelay;
     }
@@ -54,16 +56,7 @@ public class EnemyStateMachine : MonoBehaviour
                 // Determining randomized movement
                 if (Time.time >= nextMoveTime) {
                     // If the enemy should stop waiting
-                    if(transform.position.x < targetX - targetThreshold || transform.position.x > targetX + targetThreshold) {
-                        // Move to the new position
-                        Vector3 newPosition = new Vector3(targetX, transform.position.y, transform.position.z);
-                        if(targetX < transform.position.x) {
-                            transform.Translate(Vector3.left * Time.deltaTime * walkSpeed, Space.World);
-                        } else {
-                            transform.Translate(Vector3.right * Time.deltaTime * walkSpeed, Space.World);
-                        }
-                    
-                    } else {
+                    if(!MoveToTargetX(walkSpeed)) {
                         // If already in the new position, set a new position and wait more
                         targetX = transform.position.x + Random.Range(-wanderDistance, wanderDistance);
                         // Turn to the target
@@ -86,17 +79,27 @@ public class EnemyStateMachine : MonoBehaviour
                     // Move to the player
                     if (weaponUser.target.x < transform.position.x)
                     {
-                        transform.Translate(Vector3.left * Time.deltaTime * speed, Space.World);
+                        transform.Translate(Vector3.left * Time.deltaTime * runSpeed, Space.World);
                     }
                     else
                     {
-                        transform.Translate(Vector3.right * Time.deltaTime * speed, Space.World);
+                        transform.Translate(Vector3.right * Time.deltaTime * runSpeed, Space.World);
                     }
                 }
                 else if(Time.time >= nextFireTime) {
                     weaponUser.Attack();
                     nextFireTime = Time.time + fireDelay;
                     }
+                break;
+            case (EnemyState.RETREATING):
+                // Determine closest cover
+                Cover nearestCover = coverUser.GetNearestCover(transform.position);
+                // Get the x point of the position
+                targetX = nearestCover.coverPoint.transform.position.x;
+                // Run into the cover
+                if(!MoveToTargetX(runSpeed)) {
+                    StartCoroutine(WaitInCover(5, nearestCover));
+                }
                 break;
         }
     }
@@ -111,5 +114,32 @@ public class EnemyStateMachine : MonoBehaviour
         if (state == EnemyState.IDLE) {
             state = EnemyState.ACTIVE;
         }
+    }
+    /// <summary>
+    /// Moves the enemy to the current targetX. Returns true if a move is done, false otherwise
+    /// </summary>
+    /// <returns>True if the enemy moved, false otherwise</returns>
+    protected bool MoveToTargetX(float speed) {
+        if(transform.position.x < targetX - targetThreshold || transform.position.x > targetX + targetThreshold) {
+            // Move to the new position
+            Vector3 newPosition = new Vector3(targetX, transform.position.y, transform.position.z);
+            if(targetX < transform.position.x) {
+                transform.Translate(Vector3.left * Time.deltaTime * speed, Space.World);
+            } else {
+                transform.Translate(Vector3.right * Time.deltaTime * speed, Space.World);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private IEnumerator WaitInCover(float time, Cover cover) {
+        coverUser.EnterCover(cover);
+        state = EnemyState.COVER;
+        yield return new WaitForSeconds(time);
+        if(coverUser.inCover) {
+            coverUser.LeaveCover();
+        }
+        state = EnemyState.ACTIVE;
     }
 }

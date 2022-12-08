@@ -12,6 +12,9 @@ public class EnemyController : MonoBehaviour, IDamageable
     protected float baseFlinchDuration;
     [SerializeField]
     protected float flinchDistance;
+    [SerializeField]
+    protected float gravity;
+    protected Rigidbody rigidbody;
     
     public float maxHealth { 
         get {return _maxHealth;}
@@ -51,12 +54,16 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void Start()
     {
         _health = maxHealth;
+        rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        
+        // Applying simple gravity
+        float newY = transform.position.y - gravity * Time.deltaTime;
+        Vector3 newPosition = new Vector3(transform.position.x, newY, transform.position.z);
+        rigidbody.MovePosition(newPosition);
     }
 
     private IEnumerator Flinch(float flinchDuration)
