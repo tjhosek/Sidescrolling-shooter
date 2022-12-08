@@ -48,6 +48,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
     protected void Update()
     {
+        // Defining state behaviors
         switch (state) {
             case (EnemyState.IDLE):
                 // Determining randomized movement
@@ -75,16 +76,7 @@ public class EnemyStateMachine : MonoBehaviour
                         Debug.Log("Moving to " + targetX);
                     } 
                 }
-                // If the player is seen then become active
-                if (view.interest != null) {
-                    state = EnemyState.ACTIVE;
-                }
-                if (enemyController.isDestroyed)
-                {
-                    state = EnemyState.DEAD;
-                }
                 break;
-
             case (EnemyState.ACTIVE):
                 // Direct the weapon at the target
                 weaponUser.target = view.interest.transform.position;
@@ -105,11 +97,19 @@ public class EnemyStateMachine : MonoBehaviour
                     weaponUser.Attack();
                     nextFireTime = Time.time + fireDelay;
                     }
-                if (enemyController.isDestroyed)
-                {
-                    state = EnemyState.DEAD;
-                }
                 break;
+        }
+    }
+
+    protected void OnHealthDecrease() {
+        state = EnemyState.RETREATING;
+    }
+    protected void OnDestroyed() {
+        state = EnemyState.DEAD;
+    }
+    protected void OnInterestDetected() {
+        if (state == EnemyState.IDLE) {
+            state = EnemyState.ACTIVE;
         }
     }
 }

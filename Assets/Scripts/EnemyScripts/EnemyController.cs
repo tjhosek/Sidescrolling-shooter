@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         set {
             _isDestroyed = value;
             if(_isDestroyed) {
+                SendMessage("OnDestroyed");
                 transform.Rotate(new Vector3(0,0,90));
                 Vector3 newPos = transform.position;
                 newPos.y = .5f;
@@ -36,7 +37,8 @@ public class EnemyController : MonoBehaviour, IDamageable
         get { return _health; }
         set { 
             if(value < _health) {
-                StartCoroutine(Flinch(baseFlinchDuration));  
+                SendMessage("OnHealthDecrease");
+                StartCoroutine(Flinch(baseFlinchDuration));
             }
             _health = Mathf.Clamp(value, 0, maxHealth); 
             if(_health == 0) {

@@ -12,6 +12,7 @@ public class EnemyView : MonoBehaviour
         if (other.CompareTag("Player")) {
             Debug.Log("Player Detected!");
             _interest = other;
+            SendMessageUpwards("OnInterestDetected");
         }
     }
 
