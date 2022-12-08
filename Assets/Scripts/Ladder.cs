@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Defines the behavior of a Ladder
+/// </summary>
 public class Ladder : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other) {

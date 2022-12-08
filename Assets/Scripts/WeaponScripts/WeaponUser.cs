@@ -19,7 +19,7 @@ public class WeaponUser : MonoBehaviour
         set {
             if (value is RangedWeapon && canUseRangedWeapons) {
                 _currentWeapon = value;
-            } else if (canUseMeleeWeapons) { // I have not collapsed this if in case I need to distinguish melee weapons later
+            } else if (canUseMeleeWeapons) { // I have not collapsed this if in case I need to distinguish more weapon types later
                 _currentWeapon = value;
             }
         }

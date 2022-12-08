@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+/// <summary>
+/// A level end zone.
+/// </summary>
 public class LevelEnd : MonoBehaviour
 {
     [SerializeField]
